@@ -66,7 +66,7 @@ function Login() {
           }}
           value={email}
           required
-        ></input>
+        />
         <input
           type="password"
           onChange={(e) => {
@@ -75,7 +75,7 @@ function Login() {
           placeholder="Senha"
           value={password}
           required
-        ></input>
+        />
         <Button>
           {!loading ? (
             "Entrar"

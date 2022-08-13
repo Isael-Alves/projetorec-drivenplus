@@ -24,14 +24,16 @@ function Registration() {
   }
 
   function sendForm(e) {
+    e.preventDefault();
+    console.log("entrei no form");
     if (!loading) {
       setLoading(true);
-      console.log("entrei no form");
-      e.preventDefault();
-      
+
       const body = {
         ...form,
       };
+
+      console.log(body);
 
       const promise = axios.post(
         `https://mock-api.driven.com.br/api/v4/driven-plus/auth/sign-up`,
@@ -60,8 +62,8 @@ function Registration() {
   return (
     <Container>
       <Body>
-        <Form onSubmit={sendForm}>
-        <input
+        <Form>
+          <input
             type="email"
             name="email"
             placeholder="E-mail"
@@ -93,7 +95,7 @@ function Registration() {
             value={form.password}
             required
           />
-          <Button>
+          <Button onClick={(e) => sendForm(e)}>
             {!loading ? (
               "Cadastrar"
             ) : (
