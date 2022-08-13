@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {FaArrowLeft} from 'react-icons/fa'
 import styled from "styled-components";
-import { AuthContext } from "../common/auth";
-// import { useNavigate } from "react-router-dom";
+import SubscriptionsInputs from "./SubscriptionInputs";
+import { useNavigate } from "react-router-dom";
 
 export default function SubscriptionsSelectedPlan() {
-  const { plan } = React.useContext(AuthContext);
+  const plan = JSON.parse(localStorage.getItem("plan"));
   const { image, id, name, price, perks } = plan;
-//   const navigate = useNavigate();
+  const [confirm, setConfirm] = useState(false);
+   const navigate = useNavigate();
   
   return (
     <>
@@ -18,7 +19,9 @@ export default function SubscriptionsSelectedPlan() {
         "left": "22px",
         "top": "24px",
         "color": "#FFFFFF",
-      }}/>
+      }}
+      onClick={()=>navigate('../subscriptions')}
+      />
       <Title>
         <img src={image} alt="" /> <h1>{name}</h1>
       </Title>
@@ -38,6 +41,8 @@ export default function SubscriptionsSelectedPlan() {
           <h3>R$ {price.replace(".", ",")} cobrados mensalmente </h3>
         </div>
       </Description>
+      <SubscriptionsInputs id={id}/>
+      
     </>
   );
 }

@@ -40,6 +40,7 @@ export default function Subscriptions() {
 
     dataPlan.then((res) => {
       setPlan(res.data);
+      window.localStorage.setItem('plan',JSON.stringify(res.data));
       navigate(`/subscriptions/${id}`);
     });
 
