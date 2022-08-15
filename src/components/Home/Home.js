@@ -2,21 +2,28 @@ import styled from "styled-components";
 import user from "../../assets/img/Vector.svg";
 
 export default function Home() {
+  const dados = JSON.parse(localStorage.getItem("dataUser"));
+  const data = JSON.parse(localStorage.getItem("dados"));
+  const { name } = data;
+  const { image, perks } = dados.membership;
+
   return (
     <>
       <Header>
-        <img
-          className="LogoDriven"
-          src="https://svgshare.com/i/dSP.svg"
-          alt=""
-        />
+        <img className="LogoDriven" src={image} alt="" />
         <img className="UserCircle" src={user} alt="" />
       </Header>
-      <Title>Olá, fulano</Title>
+      <Title>Olá, {name}</Title>
       <BoxButtons>
         <section>
-          <div>Solicitar brindes</div>
-          <div>Materiais bônus de web</div>
+          {perks.map((benefits, i) => {
+            const { link, title } = benefits;
+            return (
+              <div key={i}>
+                <a href={link}>{title}</a>
+              </div>
+            );
+          })}
         </section>
         <section>
           <div>Mudar plano</div>
@@ -72,7 +79,7 @@ const BoxButtons = styled.nav`
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
     div {
       width: 299px;
       height: 52px;

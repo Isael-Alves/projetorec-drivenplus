@@ -1,7 +1,13 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useState } from "react";
+import ConfirmSubscription from "./ConfirmSubscription";
+import { useNavigate } from "react-router-dom";
 
 export default function SubscriptionsInputs({ id }) {
+  const dados = JSON.parse(localStorage.getItem("dados"));
+  const { token } = dados;
+  const [confirmation, setConfirmation] = useState(false);
   const clearForm = {
     membershipId: `${id}`,
     cardName: "",
@@ -10,6 +16,13 @@ export default function SubscriptionsInputs({ id }) {
     expirationDate: "",
   };
   const [form, setForm] = useState(clearForm);
+  const navigate = useNavigate();
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   function handleForm(e) {
     setForm({
@@ -18,50 +31,97 @@ export default function SubscriptionsInputs({ id }) {
     });
   }
 
-  function buildForm() {}
+  function buildForm() {
+    const { cardName, cardNumber, securityNumber, expirationDate } = form;
+    if (
+      cardName !== "" &&
+      cardNumber !== "" &&
+      securityNumber !== "" &&
+      expirationDate !== "" &&
+      confirmation
+    ) {
+      const body = form;
+      const searchPlans = axios.post(
+        `https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions`,
+        body,
+        config
+      );
+
+      searchPlans.then((res) => {
+        window.localStorage.setItem("dataUser", JSON.stringify(res.data));
+        navigate("../home");
+        setForm(clearForm);
+      });
+
+      searchPlans.catch((err) => {
+        const message = err.response.data.message;
+        alert(message);
+      });
+    }
+  }
 
   return (
-    <Form>
-      <input
-        type="text"
-        name="cardName"
-        placeholder="Nome impresso no cartão"
-        onChange={handleForm}
-        value={form.cardName}
-        required
-      />
-      <input
-        type="text"
-        name="cardNumber"
-        placeholder="Digitos do cartão"
-        onChange={handleForm}
-        value={form.cardNumber}
-        required
-      />
-      <div>
-        <input 
-        type="text" 
-        name="securityNumber"
-        placeholder="Código de segurança" 
-        onChange={handleForm}
-        value={form.securityNumber}
-        required
+    <>
+      <Form>
+        <input
+          type="text"
+          name="cardName"
+          placeholder="Nome impresso no cartão"
+          onChange={handleForm}
+          value={form.cardName}
+          required
         />
-        <input 
-        type="month" 
-        name="expirationDate"
-        placeholder="Validade" 
-        onChange={handleForm}
-        value={form.expirationDate}
-        required
+        <input
+          type="text"
+          name="cardNumber"
+          placeholder="Digitos do cartão"
+          onChange={handleForm}
+          value={form.cardNumber}
+          required
         />
-      </div>
-      <Button>Assinar</Button>
-    </Form>
+        <div>
+          <input
+            type="text"
+            name="securityNumber"
+            placeholder="Código de segurança"
+            onChange={handleForm}
+            value={form.securityNumber}
+            required
+          />
+          <input
+            type="month"
+            name="expirationDate"
+            placeholder="Validade"
+            onChange={handleForm}
+            value={form.expirationDate}
+            required
+          />
+        </div>
+        <Button
+          onClick={() => {
+            if (confirmation) {
+              return "";
+            } else {
+              return setConfirmation(true);
+            }
+          }}
+        >
+          Assinar
+        </Button>
+      </Form>
+      {confirmation ? (
+        <ConfirmSubscription
+          buildForm={buildForm}
+          setConfirmation={setConfirmation}
+        />
+      ) : (
+        ""
+      )}
+    </>
   );
 }
 
-const Form = styled.form`
+const Form = styled.nav`
   margin-top: 40px;
   display: flex;
   flex-direction: column;

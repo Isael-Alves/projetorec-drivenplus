@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {FaArrowLeft} from 'react-icons/fa'
 import styled from "styled-components";
 import SubscriptionsInputs from "./SubscriptionInputs";
@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 export default function SubscriptionsSelectedPlan() {
   const plan = JSON.parse(localStorage.getItem("plan"));
   const { image, id, name, price, perks } = plan;
-  const [confirm, setConfirm] = useState(false);
    const navigate = useNavigate();
   
   return (
@@ -42,7 +41,6 @@ export default function SubscriptionsSelectedPlan() {
         </div>
       </Description>
       <SubscriptionsInputs id={id}/>
-      
     </>
   );
 }
