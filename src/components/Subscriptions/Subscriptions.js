@@ -17,15 +17,6 @@ export default function Subscriptions() {
     },
   };
 
-  checkUserOnline();
-
-  function checkUserOnline() {
-    if (!plan) {
-      return "";
-    } else {
-      return navigate("../home");
-    }
-  }
 
   useEffect(() => {
     const searchPlans = axios.get(
