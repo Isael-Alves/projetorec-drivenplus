@@ -14,10 +14,10 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/sign-up" element={<Registration />} />
-          <Route path="/subscriptions" element={<Subscriptions />} />
-          <Route path="/subscriptions/:idPlan" element={<SubscriptionsSelectedPlan />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="sign-up" element={<Registration />} />
+          <Route path="subscriptions" element={<Subscriptions />} />
+          <Route path="subscriptions/:idPlan" element={<SubscriptionsSelectedPlan />} />
+          <Route path="home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </>

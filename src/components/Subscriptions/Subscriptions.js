@@ -7,6 +7,7 @@ import styled from "styled-components";
 export default function Subscriptions() {
   const { setPlan } = React.useContext(AuthContext);
   const dados = JSON.parse(localStorage.getItem("dados"));
+  const plan = JSON.parse(localStorage.getItem("plan"));
   const { token } = dados;
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
@@ -15,6 +16,16 @@ export default function Subscriptions() {
       Authorization: `Bearer ${token}`,
     },
   };
+
+  checkUserOnline();
+
+  function checkUserOnline() {
+    if (!plan) {
+      return "";
+    } else {
+      return navigate("../home");
+    }
+  }
 
   useEffect(() => {
     const searchPlans = axios.get(
@@ -41,7 +52,7 @@ export default function Subscriptions() {
     dataPlan.then((res) => {
       setPlan(res.data);
       window.localStorage.setItem('plan',JSON.stringify(res.data));
-      navigate(`/subscriptions/${id}`);
+      navigate(`../subscriptions/${id}`);
     });
 
     dataPlan.catch((err) => {

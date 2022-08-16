@@ -1,11 +1,37 @@
 import styled from "styled-components";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import user from "../../assets/img/Vector.svg";
 
 export default function Home() {
   const dados = JSON.parse(localStorage.getItem("dataUser"));
   const data = JSON.parse(localStorage.getItem("dados"));
-  const { name } = data;
+  const { name, token } = data;
   const { image, perks } = dados.membership;
+  const navigate = useNavigate();
+  const URL = `https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions`;
+
+function cancelPlan(){
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const searchPlans = axios.delete(
+    URL,
+    config
+  );
+
+  searchPlans.then(() => {
+    navigate('../subscriptions');
+  });
+
+  searchPlans.catch((err) => {
+    const message = err.response.data.message;
+    alert(message);
+  });
+}
 
   return (
     <>
@@ -26,11 +52,13 @@ export default function Home() {
           })}
         </section>
         <section>
-          <div>Mudar plano</div>
-          <div style={{ backgroundColor: "#FF4747" }}>Cancelar plano</div>
+          <div onClick={()=> navigate('../subscriptions')}>Mudar plano</div>
+          <div 
+          style={{ backgroundColor: "#FF4747" }}
+          onClick={() => cancelPlan()}
+          >Cancelar plano</div>
         </section>
       </BoxButtons>
-      ,
     </>
   );
 }

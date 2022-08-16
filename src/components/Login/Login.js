@@ -7,11 +7,23 @@ import logo from "../../assets/img/Driven_white 1.svg";
 import { Button, Body, Form } from "../../styles/loginStyle";
 
 function Login() {
-  const {setDados} = React.useContext(AuthContext); 
+  const dados = JSON.parse(localStorage.getItem("dados"));
+
+  const { setDados } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  checkUserOnline();
+
+  function checkUserOnline() {
+    if (!dados) {
+      return "";
+    } else {
+      return navigate("../subscriptions");
+    }
+  }
 
   function handForm(e) {
     if (!loading) {
@@ -28,20 +40,19 @@ function Login() {
       );
 
       promise.then((res) => {
-        delete res.data.password
-        delete res.data.email
-        delete res.data.cpf
+        delete res.data.password;
+        delete res.data.email;
+        delete res.data.cpf;
         setDados(res.data);
-        window.localStorage.setItem('dados',JSON.stringify(res.data));
+        window.localStorage.setItem("dados", JSON.stringify(res.data));
         setEmail("");
         setPassword("");
         setLoading(false);
-        if(res.data.membership !== null){
-          navigate('../home');
-        }else {
-          navigate('../subscriptions');
+        if (res.data.membership !== null) {
+          navigate("../home");
+        } else {
+          navigate("../subscriptions");
         }
-
       });
 
       promise.catch((err) => {
@@ -55,39 +66,41 @@ function Login() {
   }
 
   return (
-    <Body>
-      <img src={logo} alt="Logo" />
-      <Form onSubmit={handForm}>
-        <input
-          type="email"
-          placeholder="E-mail"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          value={email}
-          required
-        />
-        <input
-          type="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          placeholder="Senha"
-          value={password}
-          required
-        />
-        <Button>
-          {!loading ? (
-            "Entrar"
-          ) : (
-            <ThreeDots color="#FFFFFF" height={20} width={70} />
-          )}
-        </Button>
-      </Form>
-      <h5 onClick={() => navigate(`../sign-up`)}>
-        Não tem uma conta? Cadastre-se!
-      </h5>
-    </Body>
+    <>
+      <Body>
+        <img src={logo} alt="Logo" />
+        <Form onSubmit={handForm}>
+          <input
+            type="email"
+            placeholder="E-mail"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            value={email}
+            required
+          />
+          <input
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Senha"
+            value={password}
+            required
+          />
+          <Button>
+            {!loading ? (
+              "Entrar"
+            ) : (
+              <ThreeDots color="#FFFFFF" height={20} width={70} />
+            )}
+          </Button>
+        </Form>
+        <h5 onClick={() => navigate(`../sign-up`)}>
+          Não tem uma conta? Cadastre-se!
+        </h5>
+      </Body>
+    </>
   );
 }
 
