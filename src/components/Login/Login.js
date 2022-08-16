@@ -49,9 +49,9 @@ function Login() {
         setPassword("");
         setLoading(false);
         if (res.data.membership !== null) {
-          navigate("../home");
-        } else {
           navigate("../subscriptions");
+        } else {
+          navigate("../home");
         }
       });
 

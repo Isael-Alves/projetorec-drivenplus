@@ -7,7 +7,6 @@ import styled from "styled-components";
 export default function Subscriptions() {
   const { setPlan } = React.useContext(AuthContext);
   const dados = JSON.parse(localStorage.getItem("dados"));
-  const plan = JSON.parse(localStorage.getItem("plan"));
   const { token } = dados;
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
